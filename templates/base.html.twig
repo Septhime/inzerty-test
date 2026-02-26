@@ -8,7 +8,21 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="bg-[#0a0a12] overflow-x-hidden antialiased">
+        <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+            <div class="absolute rounded-full opacity-35 w-[400px] h-[400px] blur-[100px] bg-[radial-gradient(circle,rgba(99,102,241,0.5),transparent_70%)] -top-[5%] -right-[5%] animate-[blob-drift-1_25s_ease-in-out_infinite]"></div>
+            <div class="absolute rounded-full opacity-35 w-[350px] h-[350px] blur-[100px] bg-[radial-gradient(circle,rgba(168,85,247,0.4),transparent_70%)] bottom-[10%] -left-[8%] animate-[blob-drift-2_30s_ease-in-out_infinite]"></div>
+        </div>
+
+        <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-[rgba(10,10,18,0.6)] backdrop-blur-2xl border-b border-white/8">
+            <a href="{{ path('app_home') }}" class="text-lg font-semibold tracking-wide text-white/90">
+                🎬 CinemaDB
+            </a>
+            <div class="flex items-center gap-2">
+                <a href="{{ path('movie_top_rated_list') }}" class="rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-400 {{ app.request.attributes.get('_route') == 'movie_top_rated_list' ? 'text-white bg-white/10 border border-white/12' : 'text-white/70 hover:text-white hover:bg-white/8' }}">Films</a>
+                <a href="{{ path('tv_show_top_rated_list') }}" class="rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-400 {{ app.request.attributes.get('_route') == 'tv_show_top_rated_list' ? 'text-white bg-white/10 border border-white/12' : 'text-white/70 hover:text-white hover:bg-white/8' }}">Séries TV</a>
+            </div>
+        </nav>
         {% block body %}{% endblock %}
     </body>
 </html>
