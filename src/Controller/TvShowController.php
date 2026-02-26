@@ -22,7 +22,28 @@ class TvShowController extends AbstractController
     public function topRated(Request $request): Response
     {
         $page = max(1, $request->query->getInt('page', 1));
-        $data = $this->tmdbApiService->getTopRatedTvShows($page);
+
+        try {
+            $data = $this->tmdbApiService->getTopRatedTvShows($page);
+        } catch (\Throwable) {
+            return $this->render('tv_show/top_rated.html.twig', [
+                'tv_shows' => [],
+                'current_page' => $page,
+                'total_pages' => 1,
+                'total_results' => 0,
+                'error' => 'Impossible de récupérer les séries. Veuillez réessayer plus tard.',
+            ]);
+        }
+
+        if (!isset($data['results'], $data['page'], $data['total_pages'], $data['total_results'])) {
+            return $this->render('tv_show/top_rated.html.twig', [
+                'tv_shows' => [],
+                'current_page' => $page,
+                'total_pages' => 1,
+                'total_results' => 0,
+                'error' => 'Réponse inattendue de l\'API.',
+            ]);
+        }
 
         return $this->render('tv_show/top_rated.html.twig', [
             'tv_shows' => $data['results'],

@@ -22,7 +22,28 @@ class MovieController extends AbstractController
     public function topRated(Request $request): Response
     {
         $page = max(1, $request->query->getInt('page', 1));
-        $data = $this->tmdbApiService->getTopRatedMovies($page);
+
+        try {
+            $data = $this->tmdbApiService->getTopRatedMovies($page);
+        } catch (\Throwable) {
+            return $this->render('movie/top_rated.html.twig', [
+                'movies' => [],
+                'current_page' => $page,
+                'total_pages' => 1,
+                'total_results' => 0,
+                'error' => 'Impossible de récupérer les films. Veuillez réessayer plus tard.',
+            ]);
+        }
+
+        if (!isset($data['results'], $data['page'], $data['total_pages'], $data['total_results'])) {
+            return $this->render('movie/top_rated.html.twig', [
+                'movies' => [],
+                'current_page' => $page,
+                'total_pages' => 1,
+                'total_results' => 0,
+                'error' => 'Réponse inattendue de l\'API.',
+            ]);
+        }
 
         return $this->render('movie/top_rated.html.twig', [
             'movies' => $data['results'],

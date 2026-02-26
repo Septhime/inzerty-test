@@ -48,8 +48,8 @@ class TmdbApiService
      */
     public function getTopRatedMovies(int $page = 1): array
     {
-        if (null == $this->tmdbApiKey) {
-            throw new \RuntimeException('TMDB API key is not set. Please set the TMDB_API_KEY environment variable.');
+        if ('' == $this->tmdbApiKey) {
+            throw new \RuntimeException('La clé API de TMDB n\'est pas définie');
         }
         $response = $this->httpClient->request('GET', $this->tmdbBaseUrl.'/movie/top_rated', [
             'auth_bearer' => $this->tmdbApiKey,
