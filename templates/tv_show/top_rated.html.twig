@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Séries TV les mieux notées - Page {{ current_page }}{% endblock %}
+
+{% block body %}
+    <h1>Séries TV les mieux notées</h1>
+    <p>{{ total_results }} résultats au total</p>
+
+    <a href="{{ path('app_home') }}">&larr; Retour à l'accueil</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Poster</th>
+                <th>Nom</th>
+                <th>Première diffusion</th>
+                <th>Note</th>
+                <th>Votes</th>
+                <th>Synopsis</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tv_show in tv_shows %}
+                <tr>
+                    <td>
+                        {% if tv_show.poster_path %}
+                            <img src="{{ tmdb_image_base_url ~ tv_show.poster_path }}"
+                                 alt="{{ tv_show.name }}"
+                                 width="100">
+                        {% else %}
+                            Pas d'image
+                        {% endif %}
+                    </td>
+                    <td>{{ tv_show.name }}</td>
+                    <td>{{ tv_show.first_air_date }}</td>
+                    <td>{{ tv_show.vote_average }}/10</td>
+                    <td>{{ tv_show.vote_count }}</td>
+                    <td>{{ tv_show.overview }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav>
+        {% if current_page > 1 %}
+            <a href="{{ path('tv_show_top_rated_list', {page: current_page - 1}) }}">&laquo; Précédent</a>
+        {% endif %}
+
+        Page {{ current_page }} / {{ total_pages }}
+
+        {% if current_page < total_pages %}
+            <a href="{{ path('tv_show_top_rated_list', {page: current_page + 1}) }}">Suivant &raquo;</a>
+        {% endif %}
+    </nav>
+{% endblock %}
