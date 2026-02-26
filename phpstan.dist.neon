@@ -1,0 +1,27 @@
+parameters:
+    level: max
+
+    paths:
+        - src/
+        - tests/
+
+    excludePaths:
+        - var/
+        - vendor/
+        - public/
+        - tests/bootstrap.php
+
+    bootstrapFiles:
+        - vendor/autoload.php
+
+    symfony:
+        constantHassers: false
+        consoleApplicationLoader: bin/console
+
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkMissingCallableSignature: true
+    reportUnmatchedIgnoredErrors: true
+    treatPhpDocTypesAsCertain: false
