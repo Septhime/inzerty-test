@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Films les mieux notés - Page {{ current_page }}{% endblock %}
+
+{% block body %}
+    <h1>Films les mieux notés</h1>
+    <p>{{ total_results }} résultats au total</p>
+
+    <a href="{{ path('app_home') }}">&larr; Retour à l'accueil</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Poster</th>
+                <th>Titre</th>
+                <th>Date de sortie</th>
+                <th>Note</th>
+                <th>Votes</th>
+                <th>Synopsis</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in movies %}
+                <tr>
+                    <td>
+                        {% if movie.poster_path %}
+                            <img src="{{ tmdb_image_base_url ~ movie.poster_path }}"
+                                 alt="{{ movie.title }}"
+                                 width="100">
+                        {% else %}
+                            Pas d'image
+                        {% endif %}
+                    </td>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.release_date }}</td>
+                    <td>{{ movie.vote_average }}/10</td>
+                    <td>{{ movie.vote_count }}</td>
+                    <td>{{ movie.overview }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav>
+        {% if current_page > 1 %}
+            <a href="{{ path('movie_top_rated_list', {page: current_page - 1}) }}">&laquo; Précédent</a>
+        {% endif %}
+
+        Page {{ current_page }} / {{ total_pages }}
+
+        {% if current_page < total_pages %}
+            <a href="{{ path('movie_top_rated_list', {page: current_page + 1}) }}">Suivant &raquo;</a>
+        {% endif %}
+    </nav>
+{% endblock %}
