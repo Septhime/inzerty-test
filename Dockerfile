@@ -38,9 +38,6 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/app.conf.d"
 
 ###> recipes ###
-###> doctrine/doctrine-bundle ###
-RUN install-php-extensions pdo_pgsql
-###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
 COPY --link frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
@@ -79,10 +76,22 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 COPY --link frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
 
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends nodejs npm; \
+	rm -rf /var/lib/apt/lists/*
+
 # prevent the reinstallation of vendors at every changes in the source code
 COPY --link composer.* symfony.* ./
 RUN set -eux; \
 	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
+
+COPY --link package.json package-lock.json webpack.config.js postcss.config.mjs ./
+COPY --link assets/ ./assets/
+RUN set -eux; \
+	npm ci --no-audit; \
+	npm run build; \
+	rm -rf node_modules
 
 # copy sources
 COPY --link --exclude=frankenphp/ . ./
@@ -92,7 +101,4 @@ RUN set -eux; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
-	if [ -f importmap.php ]; then \
-		php bin/console asset-map:compile; \
-	fi; \
 	chmod +x bin/console; sync;
