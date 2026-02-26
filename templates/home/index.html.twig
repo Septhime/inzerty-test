@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TMDB Explorer{% endblock %}
+
+{% block body %}
+    <h1>TMDB Explorer</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ path('movie_top_rated_list') }}">Films les mieux notés</a></li>
+            <li><a href="{{ path('tv_show_top_rated_list') }}">Séries TV les mieux notées</a></li>
+        </ul>
+    </nav>
+{% endblock %}
