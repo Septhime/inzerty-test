@@ -31,13 +31,15 @@ TMDB_API_KEY=votre_cle_api_tmdb
 
 ## Lancement
 
+ATTENTION ! Le premier lancement du projet peut être long et peut indiquer que le conteneur est unhealthy.
+Regarder dans le conteneur (```docker compose logs php```) s'il n'est pas encore en installation de dépendance avant de l'éteindre.
 ### Developpement
 
 ```bash
 docker compose up --build --wait
 ```
 
-L'application est accessible sur [https://localhost:80](https://localhost:80).
+L'application est accessible sur [https://localhost:80](https://localhost:80) (Port 80).
 
 Il permet d'accéder à la version debug de Symfony avec la toolbar.
 
@@ -47,7 +49,7 @@ Il permet d'accéder à la version debug de Symfony avec la toolbar.
 docker compose -f compose.yaml -f compose.prod.yaml up --build --wait
 ```
 
-N'affiche pas la toolbar et essaye d'être le plus performant possible pour une mise en production
+Cette version n'affiche pas la toolbar et essaye d'être le plus performant possible pour une mise en production
 
 ## Structure du projet
 

@@ -22,6 +22,8 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends \
 		file \
 		git \
+        nodejs  \
+        npm \
 	; \
 	rm -rf /var/lib/apt/lists/*; \
 	install-php-extensions \
@@ -76,10 +78,6 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 COPY --link frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
 
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends nodejs npm; \
-	rm -rf /var/lib/apt/lists/*
 
 # prevent the reinstallation of vendors at every changes in the source code
 COPY --link composer.* symfony.* ./

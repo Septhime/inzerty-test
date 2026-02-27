@@ -22,6 +22,13 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		composer install --prefer-dist --no-progress --no-interaction
 	fi
 
+	# Build frontend assets if node_modules or entrypoints.json are missing
+	if [ -f package.json ] && { [ ! -d node_modules ] || [ ! -f public/build/entrypoints.json ]; }; then
+		echo 'Installing npm dependencies and building assets...'
+		npm install --no-audit
+		npm run dev
+	fi
+
 	# Display information about the current project
 	# Or about an error in project initialization
 	php bin/console -V
